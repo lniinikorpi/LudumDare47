@@ -23,9 +23,12 @@ public class GameManager : MonoBehaviour
     float _canSpawn;
     float _canReduceMultiplier;
     public float multiplierReduceTime;
+    public float onTrackScoreTimer = 1;
+    float _canTrackScore;
     public float lapsCompleted;
     public float multiplierDecayRate = .1f;
     public float scoreMultiplier = 1;
+    public bool onTrack;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -34,11 +37,13 @@ public class GameManager : MonoBehaviour
     public Scrollbar playerHealthBar;
     public Scrollbar scoreMultiplierBar;
     public Scrollbar staminaBar;
+    public Animator canvasAnim;
 
     [Header("Scores")]
     public int enemyScore = 100;
     public int gateScore = 50;
     public int lapScore = 400;
+    public int trackScore = 10;
 
     private void Awake()
     {
@@ -54,11 +59,9 @@ public class GameManager : MonoBehaviour
         _canSpawn = _spawnInterval;
         scoreText.text = playerScore.ToString();
         playerHealthBar.size = 1;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        scoreMultiplierBar.size = 0;
+        UpdateMultiplierText();
+        AdjustStaminaBar(1);
     }
 
     // Update is called once per frame
@@ -66,21 +69,46 @@ public class GameManager : MonoBehaviour
     {
         if(Time.time >= _canSpawn)
         {
-            _canSpawn = Time.time + _spawnInterval;
-            Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
-            Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+            SpawnEnemy();
         }
 
-        if(Time.time >= _canReduceMultiplier)
+        if (Time.time >= _canReduceMultiplier)
         {
+            if (scoreMultiplier == 1 && scoreMultiplierBar.size == 0)
+                return;
             AdjustMultiplierBar(-multiplierDecayRate * Time.deltaTime);
         }
+
+        if (onTrack)
+        {
+            if (Time.time >= _canTrackScore)
+            {
+                AddScore(trackScore);
+                _canTrackScore = Time.time + onTrackScoreTimer;
+            } 
+        }
+        else
+        {
+            _canTrackScore = Time.time + onTrackScoreTimer;
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        _canSpawn = Time.time + _spawnInterval;
+    reroll:
+        Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
+        if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15 || Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) > 30)
+            goto reroll;
+        Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
     }
 
     public void AddScore(int value)
     {
         playerScore += (int)(value * scoreMultiplier);
         _canReduceMultiplier = Time.time + multiplierReduceTime;
+        canvasAnim.SetTrigger("AddScore");
+        AdjustMultiplierBar((float)value / 700);
         UpdateScoreText();
     }
 
@@ -105,15 +133,30 @@ public class GameManager : MonoBehaviour
     void AdjustMultiplierBar(float value)
     {
         scoreMultiplierBar.size += value;
-        if(scoreMultiplierBar.size >= 1)
+        if(scoreMultiplierBar.size >= 1 && scoreMultiplier < 10)
         {
+            canvasAnim.SetTrigger("AddMultiplier");
             scoreMultiplierBar.size = .1f;
             scoreMultiplier += .5f;
+            scoreMultiplierText.fontSize += 5;
+            UpdateMultiplierText();
         }
-        else if(scoreMultiplierBar.size <= 0)
+        else if(scoreMultiplierBar.size <= 0 && scoreMultiplier > 1)
         {
             scoreMultiplierBar.size = .9f;
             scoreMultiplier -= .5f;
+            scoreMultiplierText.fontSize -= 5;
+            UpdateMultiplierText();
         }
+    }
+
+    public void AdjustStaminaBar(float value)
+    {
+        staminaBar.size = value;
+    }
+
+    public void UpdateMultiplierText()
+    {
+        scoreMultiplierText.text = scoreMultiplier.ToString();
     }
 }

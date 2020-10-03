@@ -9,6 +9,7 @@ TagManager:
   - FirstCollider
   - SecondCollider
   - PlayerHitRange
+  - Track
   layers:
   - Default
   - TransparentFX
