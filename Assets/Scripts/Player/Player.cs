@@ -6,6 +6,9 @@ public class Player : MonoBehaviour
 {
     public int maxHealth = 100;
     int _currentHealth;
+    public AudioSource audioSource;
+    public AudioClip hitClip;
+    public AudioClip deathClip;
     void Start()
     {
         _currentHealth = maxHealth;
@@ -19,6 +22,8 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int value, Vector2 enemyPosition)
     {
+        audioSource.clip = hitClip;
+        audioSource.Play();
         if(_currentHealth - value > 0)
         {
             _currentHealth -= value;
@@ -35,6 +40,8 @@ public class Player : MonoBehaviour
 
     void Die()
     {
+        audioSource.clip = deathClip;
+        audioSource.Play();
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 

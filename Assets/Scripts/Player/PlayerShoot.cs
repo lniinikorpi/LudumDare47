@@ -13,24 +13,16 @@ public class PlayerShoot : MonoBehaviour
     public float bulletDamage;
     [HideInInspector]
     public float damageMultiplier;
+    public AudioClip shootClip;
+    public AudioSource audioSource;
 
     Vector2 _mousePosition;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Aim();
-    }
 
     public void OnAim(InputValue value)
     {
         _mousePosition = value.Get<Vector2>();
         _mousePosition = mainCamera.ScreenToWorldPoint(_mousePosition);
+        Aim();
     }
 
     void Aim()
@@ -48,5 +40,8 @@ public class PlayerShoot : MonoBehaviour
         GameObject go = Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
         go.GetComponent<Bullet>().speed = bulletSpeed;
         go.GetComponent<Bullet>().damage = bulletDamage;
+        audioSource.clip = shootClip;
+        audioSource.Play();
+        bulletSpawn.GetComponent<ParticleSystem>().Play();
     }
 }

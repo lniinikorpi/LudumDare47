@@ -14,6 +14,11 @@ public class EnemyMovement : MonoBehaviour
     float _currentHealth;
     float _canAttack;
     bool inAttackRange;
+    public AudioClip hitClip;
+    public AudioClip deathClip;
+    public AudioClip walkClip;
+    public AudioSource audioSource;
+    public AudioSource walkSource;
     private void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -59,6 +64,8 @@ public class EnemyMovement : MonoBehaviour
     {
         GameManager.instance.AddScore(GameManager.instance.enemyScore);
         Instantiate(GameManager.instance.bloodSplatDie,transform.position,Quaternion.identity);
+        audioSource.clip = deathClip;
+        audioSource.Play();
         Destroy(gameObject);
     }
 
@@ -66,6 +73,8 @@ public class EnemyMovement : MonoBehaviour
     {
         GameObject go = Instantiate(GameManager.instance.bloodSplatHit, from, Quaternion.identity);
         go.transform.localEulerAngles = new Vector3(0,0,bulletAngle.z);
+        audioSource.clip = hitClip;
+        audioSource.Play();
     }
 
     void Attack()
@@ -89,5 +98,19 @@ public class EnemyMovement : MonoBehaviour
             inAttackRange = false;
             _canAttack = 0;
         }
+    }
+
+    public void PlayWalkSound()
+    {
+        if(Vector2.Distance(transform.position, _player.transform.position) > 20)
+        {
+            walkSource.volume = 0;
+        }
+        else
+        {
+            walkSource.volume = .4f / Vector2.Distance(transform.position, _player.transform.position);
+        }
+        walkSource.clip = walkClip;
+        walkSource.Play();
     }
 }

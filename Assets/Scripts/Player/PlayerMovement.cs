@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 4;
     public Animator anim;
     Vector2 _movement;
+    public AudioSource audioSource;
+    public AudioClip walkClip;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,5 +50,11 @@ public class PlayerMovement : MonoBehaviour
         {
             collision.gameObject.GetComponentInParent<Gate>().CheckIfThrough();
         }
+    }
+
+    public void PlayWalkSound()
+    {
+        audioSource.clip = walkClip;
+        audioSource.Play();
     }
 }

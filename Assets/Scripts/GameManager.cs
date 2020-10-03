@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -19,10 +21,19 @@ public class GameManager : MonoBehaviour
     public List<Transform> spawns = new List<Transform>();
     float _spawnInterval = 5;
     float _canSpawn;
+    float _canReduceMultiplier;
+    public float multiplierReduceTime;
+    public float lapsCompleted;
+    public float multiplierDecayRate = .1f;
+    public float scoreMultiplier = 1;
 
     [Header("UI")]
     public TMP_Text scoreText;
+    public TMP_Text timerText;
+    public TMP_Text scoreMultiplierText;
     public Scrollbar playerHealthBar;
+    public Scrollbar scoreMultiplierBar;
+    public Scrollbar staminaBar;
 
     [Header("Scores")]
     public int enemyScore = 100;
@@ -56,14 +67,20 @@ public class GameManager : MonoBehaviour
         if(Time.time >= _canSpawn)
         {
             _canSpawn = Time.time + _spawnInterval;
-            Transform spawnPos = spawns[Random.Range(0, spawns.Count)];
+            Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
             Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+        }
+
+        if(Time.time >= _canReduceMultiplier)
+        {
+            AdjustMultiplierBar(-multiplierDecayRate * Time.deltaTime);
         }
     }
 
     public void AddScore(int value)
     {
-        playerScore += value;
+        playerScore += (int)(value * scoreMultiplier);
+        _canReduceMultiplier = Time.time + multiplierReduceTime;
         UpdateScoreText();
     }
 
@@ -75,5 +92,28 @@ public class GameManager : MonoBehaviour
     public void UpdateHealthBar(float value)
     {
         playerHealthBar.size = value;
+    }
+
+    public void CompleteLap()
+    {
+        if(lapsCompleted % 2 == 0)
+        {
+            _spawnInterval -= .5f;
+        }
+    }
+
+    void AdjustMultiplierBar(float value)
+    {
+        scoreMultiplierBar.size += value;
+        if(scoreMultiplierBar.size >= 1)
+        {
+            scoreMultiplierBar.size = .1f;
+            scoreMultiplier += .5f;
+        }
+        else if(scoreMultiplierBar.size <= 0)
+        {
+            scoreMultiplierBar.size = .9f;
+            scoreMultiplier -= .5f;
+        }
     }
 }
