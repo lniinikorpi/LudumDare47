@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text timerText;
     public TMP_Text scoreMultiplierText;
+    public TMP_Text bulletCountText;
     public Scrollbar playerHealthBar;
     public Scrollbar scoreMultiplierBar;
     public Scrollbar staminaBar;
@@ -158,5 +159,10 @@ public class GameManager : MonoBehaviour
     public void UpdateMultiplierText()
     {
         scoreMultiplierText.text = scoreMultiplier.ToString();
+    }
+
+    public void UpdateBulletCountText(int value)
+    {
+        bulletCountText.text = value.ToString();
     }
 }

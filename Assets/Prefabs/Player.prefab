@@ -5544,7 +5544,8 @@ MonoBehaviour:
   bulletSpawn: {fileID: 2591053219514236851}
   bullet: {fileID: 5397337348687234125, guid: b32382278b7cf5d4b942a93e76f527bf, type: 3}
   bulletSpeed: 30
-  bulletDamage: 10
+  bulletDamage: 25
+  fireRate: 1.5
   damageMultiplier: 0
   shootClip: {fileID: 8300000, guid: 25817c50ac8f46c40b011a0fb6c81000, type: 3}
   audioSource: {fileID: 7624764363184822809}
@@ -6028,7 +6029,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &7660114619394746515
 GameObject:
   m_ObjectHideFlags: 0
