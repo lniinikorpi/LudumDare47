@@ -136,6 +136,7 @@ public class PlayerShoot : MonoBehaviour
                 _currentClipCount--;
             }
             GameObject go;
+            _player.cameraAnim.Play("CameraShake");
             if(_tripleShotActive)
             {
                 go = Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);

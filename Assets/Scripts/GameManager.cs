@@ -169,10 +169,8 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLap()
     {
-        if(lapsCompleted % 2 == 0)
-        {
-            _spawnInterval -= .5f;
-        }
+        _spawnInterval -= .25f;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Heal(20);
     }
 
     void AdjustMultiplierBar(float value)
@@ -218,6 +216,10 @@ public class GameManager : MonoBehaviour
             firstWalls.gameObject.SetActive(false);
             _canSpawn = _spawnInterval + Time.time;
             _canSpawnPowerUp = powerUpTimer + Time.time;
+        }
+        else
+        {
+            CompleteLap();
         }
     }
 

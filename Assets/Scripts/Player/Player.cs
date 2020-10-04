@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public AudioClip deathClip;
     public GameObject playerPanel;
     public Scrollbar reloadBar;
+    public Animator cameraAnim;
 
     public PlayerShoot playerShoot;
     public PlayerMovement playerMovement;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     {
         audioSource.clip = hitClip;
         audioSource.Play();
+        cameraAnim.Play("CameraShake");
         if(_currentHealth - value > 0)
         {
             _currentHealth -= value;
@@ -44,6 +46,16 @@ public class Player : MonoBehaviour
             _currentHealth = 0;
             Die();
         }
+    }
+
+    public void Heal(int value)
+    {
+        _currentHealth += value;
+        if (_currentHealth > maxHealth)
+            _currentHealth = maxHealth;
+
+        float percentage = (float)_currentHealth / (float)maxHealth;
+        GameManager.instance.UpdateHealthBar(percentage);
     }
 
     void Die()

@@ -174,8 +174,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2201389861443162794}
   - component: {fileID: 2705732512385035039}
-  - component: {fileID: 1177992504140559187}
   - component: {fileID: 1837993101}
+  - component: {fileID: 3429537199067098966}
   m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
@@ -240,14 +240,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1177992504140559187
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2453073455128910141}
-  m_Enabled: 1
 --- !u!114 &1837993101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +271,25 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!95 &3429537199067098966
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2453073455128910141}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 68d257f626632d34c8b04643c716b0ec, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3039456979894991592
 GameObject:
   m_ObjectHideFlags: 0
@@ -5997,6 +6008,7 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 5a0d425ee32012d4489927ec81804021, type: 3}
   playerPanel: {fileID: 7585593159685410204}
   reloadBar: {fileID: 8733914656155879710}
+  cameraAnim: {fileID: 3429537199067098966}
   playerShoot: {fileID: 7660114618881105200}
   playerMovement: {fileID: 7660114618881105205}
 --- !u!114 &7660114618881105205
