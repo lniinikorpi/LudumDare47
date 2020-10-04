@@ -24,13 +24,12 @@ public class EnemyMovement : MonoBehaviour
     {
         if(viewer)
         {
-            anim.Play("Cheer");
+            anim.Play("EnemyCheer");
         }
         else
         {
             _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             _currentHealth = maxHealth;
-            anim.SetFloat("Movement", 1);
         }
     }
 

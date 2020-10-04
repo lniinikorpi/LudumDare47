@@ -162,7 +162,8 @@ public class PlayerMovement : MonoBehaviour
         _movementMultiplier = superSprintMultiplier;
         trailRenderer.emitting = true;
         anim.speed = superSprintMultiplier;
-
+        _canRechargeStamina = maxStamina;
+        GameManager.instance.AdjustStaminaBar(_currentStamina / maxStamina);
         while(_currentSuperSprintTimer < superSprintTimer)
         {
             _currentSuperSprintTimer += Time.deltaTime;

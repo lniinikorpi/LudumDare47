@@ -171,6 +171,8 @@ public class PlayerShoot : MonoBehaviour
     {
         _currentUnlimitedAmmoTimer = 0;
         _unlimitedAmmoActive = true;
+        _currentClipCount = maxClipCount;
+        GameManager.instance.UpdateBulletCountText(_currentClipCount);
         while (_currentUnlimitedAmmoTimer < unlimitedAmmoTimer)
         {
             _currentUnlimitedAmmoTimer += Time.deltaTime;
@@ -183,6 +185,8 @@ public class PlayerShoot : MonoBehaviour
     {
         _currentTripleShotTimer = 0;
         _tripleShotActive = true;
+        _currentClipCount = maxClipCount;
+        GameManager.instance.UpdateBulletCountText(_currentClipCount);
         while (_currentTripleShotTimer < tripleShotTimer)
         {
             _currentTripleShotTimer += Time.deltaTime;
