@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
     public GameObject endScreen;
     public TMP_Text endScoreText;
     public GameObject tutorialCanvas;
+    public GameObject upgradePanel;
+    public List<ItemButton> itemButtons = new List<ItemButton>();
 
     [Header("Scores")]
     public int enemyScore = 100;
@@ -71,6 +73,15 @@ public class GameManager : MonoBehaviour
     public float enemySpeed = 10;
     float enemyHealthBoost;
     float enemySpeedBoost;
+
+    [Header("Upgrades")]
+    public float healthUpgrade = 10;
+    public float speedUpgrade = .5f;
+    public float damageUpgrade = 10;
+    public float clipSizeUpgrade = 1;
+    public float reloadSpeedUpgrade = .25f;
+    public float maxStaminaUpgrade = 10;
+    public float staminaRechargeUpgrade = 1;
 
     private void Awake()
     {
@@ -95,6 +106,7 @@ public class GameManager : MonoBehaviour
         gamePlaying = false;
         mainMenuPanel.SetActive(true);
         endScreen.SetActive(false);
+        upgradePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -199,6 +211,12 @@ public class GameManager : MonoBehaviour
                 break;
         }
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Heal(20);
+        foreach (ItemButton itemButton in itemButtons)
+        {
+            itemButton.NewItems();
+        }
+        upgradePanel.SetActive(true);
+        gamePlaying = false;
     }
 
     void AdjustMultiplierBar(float value)
@@ -252,6 +270,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame()
+    {
+        gamePlaying = true;
+    }
+
+    public void ContinueGame()
     {
         gamePlaying = true;
     }

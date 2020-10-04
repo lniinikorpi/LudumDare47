@@ -34,9 +34,8 @@ public class Gate : MonoBehaviour
             firstColliderDone = false;
             if(firstGate)
             {
-                if(gm.playerLastGateIndex == gm.gates.Count - 1)
+                if (gm.playerLastGateIndex == gm.gates.Count - 1)
                 {
-                    GameManager.instance.playerLastGateIndex = gateIndex;
                     print("läpi meni");
                     gm.AddScore(gm.lapScore);
                     audioSource.clip = goodClip;
@@ -55,7 +54,6 @@ public class Gate : MonoBehaviour
                 gm.tutorialCanvas.SetActive(false);
                 if (gm.playerLastGateIndex == gateIndex - 1)
                 {
-                    gm.playerLastGateIndex = gateIndex;
                     print("läpi meni");
                     gm.AddScore(gm.gateScore);
                     audioSource.clip = goodClip;
@@ -68,6 +66,7 @@ public class Gate : MonoBehaviour
                     audioSource.Play();
                 }
             }
+            gm.playerLastGateIndex = gateIndex;
         }
     }
 }

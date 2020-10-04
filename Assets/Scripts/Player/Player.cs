@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public int maxHealth = 100;
-    int _currentHealth;
+    [HideInInspector]
+    public int _currentHealth;
     public AudioSource audioSource;
     public AudioClip hitClip;
     public AudioClip deathClip;

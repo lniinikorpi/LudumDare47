@@ -14,12 +14,11 @@ public class PlayerShoot : MonoBehaviour
     public float bulletDamage;
     public float fireRate = 1.5f;
     public int maxClipCount = 10;
-    int _currentClipCount = 0;
+    public int _currentClipCount = 0;
     public float reloadTime = 2;
     bool _reloading;
     float _canShoot;
     bool _shooting;
-    [HideInInspector]
     public float damageMultiplier;
     public AudioClip shootClip;
     public AudioSource audioSource;
@@ -175,7 +174,10 @@ public class PlayerShoot : MonoBehaviour
         GameManager.instance.UpdateBulletCountText(_currentClipCount);
         while (_currentUnlimitedAmmoTimer < unlimitedAmmoTimer)
         {
-            _currentUnlimitedAmmoTimer += Time.deltaTime;
+            if (GameManager.instance.gamePlaying)
+            {
+                _currentUnlimitedAmmoTimer += Time.deltaTime;
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
         _unlimitedAmmoActive = false;
@@ -189,7 +191,10 @@ public class PlayerShoot : MonoBehaviour
         GameManager.instance.UpdateBulletCountText(_currentClipCount);
         while (_currentTripleShotTimer < tripleShotTimer)
         {
-            _currentTripleShotTimer += Time.deltaTime;
+            if (GameManager.instance.gamePlaying)
+            {
+                _currentTripleShotTimer += Time.deltaTime; 
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
         _tripleShotActive = false;

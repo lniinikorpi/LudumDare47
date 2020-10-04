@@ -35,7 +35,11 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (!GameManager.instance.gamePlaying)
+        {
+            _movement = Vector2.zero;
+            anim.SetFloat("Movement", 0);
             return;
+        }
         Move();
         if (sprinting && _currentStamina > 0)
         {
@@ -166,7 +170,10 @@ public class PlayerMovement : MonoBehaviour
         GameManager.instance.AdjustStaminaBar(_currentStamina / maxStamina);
         while(_currentSuperSprintTimer < superSprintTimer)
         {
-            _currentSuperSprintTimer += Time.deltaTime;
+            if(GameManager.instance.gamePlaying)
+            {
+                _currentSuperSprintTimer += Time.deltaTime;
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
         trailRenderer.emitting = false;
