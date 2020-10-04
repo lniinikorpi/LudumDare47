@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject bloodSplatHit;
     public GameObject bloodSplatDie;
     public GameObject enemySpawns;
+    public GameObject powerUpPrefab;
     public List<Transform> spawns = new List<Transform>();
     float _spawnInterval = 5;
     float _canSpawn;
@@ -29,6 +30,14 @@ public class GameManager : MonoBehaviour
     public float multiplierDecayRate = .1f;
     public float scoreMultiplier = 1;
     public bool onTrack;
+    public Sprite tripleShot;
+    public Sprite unlimitedAmmo;
+    public Sprite superSprint;
+    public int maxPowerUpsSpawned = 4;
+    [HideInInspector]
+    public int _powerUpsSpawned;
+    public float powerUpTimer = 15;
+    float _canSpawnPowerUp;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -57,10 +66,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         spawns = enemySpawns.GetComponentsInChildren<Transform>().ToList();
+        spawns.RemoveAt(0);
         _canSpawn = _spawnInterval;
         scoreText.text = playerScore.ToString();
         playerHealthBar.size = 1;
         scoreMultiplierBar.size = 0;
+        _canSpawnPowerUp = powerUpTimer;
         UpdateMultiplierText();
         AdjustStaminaBar(1);
     }
@@ -75,9 +86,16 @@ public class GameManager : MonoBehaviour
 
         if (Time.time >= _canReduceMultiplier)
         {
-            if (scoreMultiplier == 1 && scoreMultiplierBar.size == 0)
-                return;
-            AdjustMultiplierBar(-multiplierDecayRate * Time.deltaTime);
+            if (scoreMultiplier == 1 && scoreMultiplierBar.size == 0) { }
+            else
+            {
+                AdjustMultiplierBar(-multiplierDecayRate * Time.deltaTime);
+            }
+        }
+
+        if(Time.time >= _canSpawnPowerUp && _powerUpsSpawned < maxPowerUpsSpawned)
+        {
+            SpawnPowerUp();
         }
 
         if (onTrack)
@@ -102,6 +120,17 @@ public class GameManager : MonoBehaviour
         if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15 || Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) > 30)
             goto reroll;
         Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+    }
+
+    void SpawnPowerUp()
+    {
+        _canSpawnPowerUp = Time.time + powerUpTimer;
+    reroll:
+        Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
+        if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15)
+            goto reroll;
+        Instantiate(powerUpPrefab, spawnPos.position, Quaternion.identity);
+        _powerUpsSpawned++;
     }
 
     public void AddScore(int value)

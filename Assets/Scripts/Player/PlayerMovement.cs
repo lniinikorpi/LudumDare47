@@ -21,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
     public float dashMultiplier = 2;
     float _movementMultiplier = 1;
     public TrailRenderer trailRenderer;
+    bool _superSprintActive;
+    public float superSprintMultiplier = 5;
+    public float superSprintTimer = 5;
+    float _currentSuperSprintTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,23 +79,30 @@ public class PlayerMovement : MonoBehaviour
 
     void Sprint()
     {
-        if(_currentStamina - staminaDecayRate * Time.deltaTime < 0)
+        if(_superSprintActive)
         {
-            _movementMultiplier = 1;
-            anim.speed = 1;
-            sprinting = false;
-            _currentStamina = 0;
-            trailRenderer.emitting = false;
+            return;
         }
         else
         {
-            _movementMultiplier = dashMultiplier;
-            _currentStamina -= staminaDecayRate * Time.deltaTime;
-            anim.speed = dashMultiplier;
-            trailRenderer.emitting = true;
+            if (_currentStamina - staminaDecayRate * Time.deltaTime < 0)
+            {
+                _movementMultiplier = 1;
+                anim.speed = 1;
+                sprinting = false;
+                _currentStamina = 0;
+                trailRenderer.emitting = false;
+            }
+            else
+            {
+                _movementMultiplier = dashMultiplier;
+                _currentStamina -= staminaDecayRate * Time.deltaTime;
+                anim.speed = dashMultiplier;
+                trailRenderer.emitting = true;
+            }
+            _canRechargeStamina = Time.time + staminaRechargeTimer;
+            GameManager.instance.AdjustStaminaBar(_currentStamina / maxStamina);
         }
-        _canRechargeStamina = Time.time + staminaRechargeTimer;
-        GameManager.instance.AdjustStaminaBar(_currentStamina / maxStamina);
     }
 
     void RechargeStamina()
@@ -131,5 +142,22 @@ public class PlayerMovement : MonoBehaviour
     {
         audioSource.clip = walkClip;
         audioSource.Play();
+    }
+
+    public IEnumerator SuperSprint()
+    {
+        _currentSuperSprintTimer = 0;
+        _superSprintActive = true;
+        _movementMultiplier = superSprintMultiplier;
+        trailRenderer.emitting = true;
+
+        while(_currentSuperSprintTimer < superSprintTimer)
+        {
+            _currentSuperSprintTimer += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        trailRenderer.emitting = false;
+        _superSprintActive = false;
+        _movementMultiplier = 1;
     }
 }

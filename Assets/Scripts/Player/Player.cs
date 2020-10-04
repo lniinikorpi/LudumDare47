@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip hitClip;
     public AudioClip deathClip;
+
+    public PlayerShoot playerShoot;
+    public PlayerMovement playerMovement;
     void Start()
     {
         _currentHealth = maxHealth;
@@ -55,5 +58,21 @@ public class Player : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.up, direction);
         Vector3 directionVector = new Vector3(0, 0, 180 + angle);
         blood.transform.localEulerAngles = directionVector;
+    }
+
+    public void PowerUp(PowerUpType powerUpType)
+    {
+        switch (powerUpType)
+        {
+            case PowerUpType.superSprint:
+                StartCoroutine(playerMovement.SuperSprint());
+                break;
+            case PowerUpType.unlimitedAmmo:
+                StartCoroutine(playerShoot.UnlimitedAmmo());
+                break;
+            case PowerUpType.tripleShot:
+                StartCoroutine(playerShoot.TripleShot());
+                break;
+        }
     }
 }

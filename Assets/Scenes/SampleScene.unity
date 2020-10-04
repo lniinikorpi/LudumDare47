@@ -28684,6 +28684,7 @@ MonoBehaviour:
   bloodSplatHit: {fileID: 7166077262002401497, guid: 803a4d69210141b4e90f352b24bb8a45, type: 3}
   bloodSplatDie: {fileID: 7166077262002401497, guid: 54a4ccec445786248a6fd497a49fe73d, type: 3}
   enemySpawns: {fileID: 2044536674}
+  powerUpPrefab: {fileID: 2876097117806397166, guid: 0cb7975ce96f366419ba48f50ce2be36, type: 3}
   spawns: []
   multiplierReduceTime: 5
   onTrackScoreTimer: 1
@@ -28691,6 +28692,12 @@ MonoBehaviour:
   multiplierDecayRate: 0.1
   scoreMultiplier: 1
   onTrack: 0
+  tripleShot: {fileID: 21300000, guid: 0b239d7f15cf9164c95b63cb5694e30f, type: 3}
+  unlimitedAmmo: {fileID: 21300000, guid: 653e519b0c8c58243aa4f1ba05f3f7a9, type: 3}
+  superSprint: {fileID: 21300000, guid: 038f6a1fc8f0d4f44a10309e2f844c46, type: 3}
+  maxPowerUpsSpawned: 4
+  _powerUpsSpawned: 0
+  powerUpTimer: 15
   scoreText: {fileID: 906736776}
   timerText: {fileID: 0}
   scoreMultiplierText: {fileID: 1910151864}
