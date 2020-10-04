@@ -39,6 +39,7 @@ public class PowerUp : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
+            GameManager.instance.powerUpsSpawned--;
             Instantiate(pickuParticle, transform.position, pickuParticle.transform.rotation);
             collision.gameObject.GetComponent<Player>().PowerUp(powerUpType);
             Destroy(gameObject);

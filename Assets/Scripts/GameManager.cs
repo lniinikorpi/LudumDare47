@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject bloodSplatDie;
     public GameObject enemySpawns;
     public GameObject powerUpPrefab;
+    public GameObject firstWalls;
     public List<Transform> spawns = new List<Transform>();
     float _spawnInterval = 5;
     float _canSpawn;
@@ -35,9 +36,10 @@ public class GameManager : MonoBehaviour
     public Sprite superSprint;
     public int maxPowerUpsSpawned = 4;
     [HideInInspector]
-    public int _powerUpsSpawned;
+    public int powerUpsSpawned;
     public float powerUpTimer = 15;
     float _canSpawnPowerUp;
+    bool _firstGatePassed;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -74,11 +76,15 @@ public class GameManager : MonoBehaviour
         _canSpawnPowerUp = powerUpTimer;
         UpdateMultiplierText();
         AdjustStaminaBar(1);
+        firstWalls.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!_firstGatePassed)
+            return;
+
         if(Time.time >= _canSpawn)
         {
             SpawnEnemy();
@@ -93,7 +99,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(Time.time >= _canSpawnPowerUp && _powerUpsSpawned < maxPowerUpsSpawned)
+        if(Time.time >= _canSpawnPowerUp && powerUpsSpawned < maxPowerUpsSpawned)
         {
             SpawnPowerUp();
         }
@@ -130,7 +136,7 @@ public class GameManager : MonoBehaviour
         if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15)
             goto reroll;
         Instantiate(powerUpPrefab, spawnPos.position, Quaternion.identity);
-        _powerUpsSpawned++;
+        powerUpsSpawned++;
     }
 
     public void AddScore(int value)
@@ -193,5 +199,16 @@ public class GameManager : MonoBehaviour
     public void UpdateBulletCountText(int value)
     {
         bulletCountText.text = value.ToString();
+    }
+
+    public void PassFirstGate()
+    {
+        if(!_firstGatePassed)
+        {
+            _firstGatePassed = true;
+            firstWalls.gameObject.SetActive(false);
+            _canSpawn = _spawnInterval + Time.time;
+            _canSpawnPowerUp = powerUpTimer + Time.time;
+        }
     }
 }

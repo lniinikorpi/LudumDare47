@@ -13,8 +13,8 @@ public class PlayerShoot : MonoBehaviour
     public float bulletSpeed;
     public float bulletDamage;
     public float fireRate = 1.5f;
-    public int maxClipSize = 10;
-    int _currentClipSize = 0;
+    public int maxClipCount = 10;
+    int _currentClipCount = 0;
     public float reloadTime = 2;
     bool _reloading;
     float _canShoot;
@@ -30,17 +30,19 @@ public class PlayerShoot : MonoBehaviour
     public float tripleShotTimer = 10;
     float _currentTripleShotTimer;
     float _currentUnlimitedAmmoTimer;
+    Player _player;
 
     Vector2 _mousePosition;
 
     private void Awake()
     {
-        _currentClipSize = maxClipSize;
+        _currentClipCount = maxClipCount;
+        _player = GetComponent<Player>();
     }
 
     private void Start()
     {
-        GameManager.instance.UpdateBulletCountText(_currentClipSize);
+        GameManager.instance.UpdateBulletCountText(_currentClipCount);
     }
 
     private void Update()
@@ -83,7 +85,7 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnReload()
     {
-        if (!_reloading)
+        if (!_reloading && _currentClipCount < maxClipCount)
         {
             StartCoroutine(ReloadWeapon());
         }
@@ -91,16 +93,20 @@ public class PlayerShoot : MonoBehaviour
 
     IEnumerator ReloadWeapon()
     {
+        _player.reloadBar.size = 0;
+        _player.playerPanel.SetActive(true);
         _reloading = true;
         float timeReloading = 0;
         while(timeReloading < reloadTime)
         {
             timeReloading += Time.deltaTime;
+            _player.reloadBar.size = timeReloading / reloadTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
+        _player.playerPanel.SetActive(false);
         _reloading = false;
-        _currentClipSize = maxClipSize;
-        GameManager.instance.UpdateBulletCountText(_currentClipSize);
+        _currentClipCount = maxClipCount;
+        GameManager.instance.UpdateBulletCountText(_currentClipCount);
     }
 
     void Shoot()
@@ -108,7 +114,7 @@ public class PlayerShoot : MonoBehaviour
         if (_reloading)
             return;
 
-        if(_currentClipSize > 0 || _unlimitedAmmoActive)
+        if(_currentClipCount > 0 || _unlimitedAmmoActive)
         {
             if(_unlimitedAmmoActive)
             {
@@ -117,7 +123,7 @@ public class PlayerShoot : MonoBehaviour
             else
             {
                 _canShoot = Time.time + 1 / fireRate;
-                _currentClipSize--;
+                _currentClipCount--;
             }
             GameObject go;
             if(_tripleShotActive)
@@ -142,7 +148,7 @@ public class PlayerShoot : MonoBehaviour
             audioSource.clip = shootClip;
             audioSource.Play();
             bulletSpawn.GetComponent<ParticleSystem>().Play();
-            GameManager.instance.UpdateBulletCountText(_currentClipSize);
+            GameManager.instance.UpdateBulletCountText(_currentClipCount);
         }
         else
         {

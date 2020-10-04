@@ -66,6 +66,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnStopSprint()
     {
+        if (_superSprintActive)
+            return;
+
         sprinting = false;
         _movementMultiplier = 1;
         anim.speed = 1;
@@ -150,6 +153,7 @@ public class PlayerMovement : MonoBehaviour
         _superSprintActive = true;
         _movementMultiplier = superSprintMultiplier;
         trailRenderer.emitting = true;
+        anim.speed = superSprintMultiplier;
 
         while(_currentSuperSprintTimer < superSprintTimer)
         {
@@ -159,5 +163,6 @@ public class PlayerMovement : MonoBehaviour
         trailRenderer.emitting = false;
         _superSprintActive = false;
         _movementMultiplier = 1;
+        anim.speed = 1;
     }
 }

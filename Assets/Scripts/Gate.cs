@@ -11,10 +11,14 @@ public class Gate : MonoBehaviour
     public bool firstGate;
     public int gateIndex;
     GameManager gm;
+    AudioSource audioSource;
+    public AudioClip goodClip;
+    public AudioClip badClip;
     // Start is called before the first frame update
     void Start()
     {
         gm = GameManager.instance;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -35,11 +39,16 @@ public class Gate : MonoBehaviour
                     GameManager.instance.playerLastGateIndex = gateIndex;
                     print("läpi meni");
                     gm.AddScore(gm.lapScore);
+                    audioSource.clip = goodClip;
+                    audioSource.Play();
                 }
                 else
                 {
                     print("väärä portti");
+                    audioSource.clip = badClip;
+                    audioSource.Play();
                 }
+                gm.PassFirstGate();
             }
             else
             {
@@ -48,10 +57,14 @@ public class Gate : MonoBehaviour
                     gm.playerLastGateIndex = gateIndex;
                     print("läpi meni");
                     gm.AddScore(gm.gateScore);
+                    audioSource.clip = goodClip;
+                    audioSource.Play();
                 }
                 else
                 {
                     print("väärä portti");
+                    audioSource.clip = badClip;
+                    audioSource.Play();
                 }
             }
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     Player _player;
-    public int speed = 5;
+    public float maxSpeed = 5;
     public float maxHealth = 100;
     public int damage = 10;
     public float attackSpeed = 1;
@@ -30,7 +30,8 @@ public class EnemyMovement : MonoBehaviour
     {
         if (Vector2.Distance(transform.position, _player.gameObject.transform.position) > stopDistance)
         {
-            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, speed * Time.deltaTime); 
+            float speed = maxSpeed - (maxSpeed/2 * (1 -_currentHealth / maxHealth)); 
+            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, speed  * Time.deltaTime); 
         }
 
         if(inAttackRange)

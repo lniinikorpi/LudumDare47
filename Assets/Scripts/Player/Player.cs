@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,12 +10,16 @@ public class Player : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip hitClip;
     public AudioClip deathClip;
+    public GameObject playerPanel;
+    public Scrollbar reloadBar;
 
     public PlayerShoot playerShoot;
     public PlayerMovement playerMovement;
     void Start()
     {
         _currentHealth = maxHealth;
+        playerPanel.SetActive(false);
+        reloadBar.size = 0;
     }
 
     // Update is called once per frame
