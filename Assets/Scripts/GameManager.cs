@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
     public float powerUpTimer = 15;
     float _canSpawnPowerUp;
     bool _firstGatePassed;
+    public bool gamePlaying = false;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -50,6 +52,10 @@ public class GameManager : MonoBehaviour
     public Scrollbar scoreMultiplierBar;
     public Scrollbar staminaBar;
     public Animator canvasAnim;
+    public GameObject gamePanel;
+    public GameObject mainMenuPanel;
+    public GameObject endScreen;
+    public TMP_Text endScoreText;
 
     [Header("Scores")]
     public int enemyScore = 100;
@@ -77,12 +83,15 @@ public class GameManager : MonoBehaviour
         UpdateMultiplierText();
         AdjustStaminaBar(1);
         firstWalls.SetActive(true);
+        gamePlaying = false;
+        mainMenuPanel.SetActive(true);
+        endScreen.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_firstGatePassed)
+        if (!_firstGatePassed || !gamePlaying)
             return;
 
         if(Time.time >= _canSpawn)
@@ -210,5 +219,24 @@ public class GameManager : MonoBehaviour
             _canSpawn = _spawnInterval + Time.time;
             _canSpawnPowerUp = powerUpTimer + Time.time;
         }
+    }
+
+    public void StartGame()
+    {
+        gamePlaying = true;
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 }

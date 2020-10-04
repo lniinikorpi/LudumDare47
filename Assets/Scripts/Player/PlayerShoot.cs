@@ -47,7 +47,9 @@ public class PlayerShoot : MonoBehaviour
 
     private void Update()
     {
-        if(Time.time > _canShoot)
+        if (!GameManager.instance.gamePlaying)
+            return;
+        if (Time.time > _canShoot)
         {
             if(_shooting)
             {
@@ -58,6 +60,8 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnAim(InputValue value)
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         _mousePosition = value.Get<Vector2>();
         _mousePosition = mainCamera.ScreenToWorldPoint(_mousePosition);
         Aim();
@@ -75,16 +79,22 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnShoot()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         _shooting = true;
     }
 
     public void OnStopShoot()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         _shooting = false;
     }
 
     public void OnReload()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         if (!_reloading && _currentClipCount < maxClipCount)
         {
             StartCoroutine(ReloadWeapon());

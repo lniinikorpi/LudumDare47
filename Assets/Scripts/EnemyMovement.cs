@@ -28,6 +28,9 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
+
         if (Vector2.Distance(transform.position, _player.gameObject.transform.position) > stopDistance)
         {
             float speed = maxSpeed - (maxSpeed/2 * (1 -_currentHealth / maxHealth)); 
@@ -103,7 +106,9 @@ public class EnemyMovement : MonoBehaviour
 
     public void PlayWalkSound()
     {
-        if(Vector2.Distance(transform.position, _player.transform.position) > 20)
+        if (!GameManager.instance.gamePlaying)
+            return;
+        if (Vector2.Distance(transform.position, _player.transform.position) > 20)
         {
             walkSource.volume = 0;
         }

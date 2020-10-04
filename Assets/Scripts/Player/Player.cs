@@ -50,7 +50,10 @@ public class Player : MonoBehaviour
     {
         audioSource.clip = deathClip;
         audioSource.Play();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        GameManager.instance.gamePlaying = false;
+        GameManager.instance.endScreen.SetActive(true);
+        GameManager.instance.endScoreText.text = "Score: " + GameManager.instance.playerScore;
+        Destroy(gameObject);
     }
 
     void SpawnBlood(Vector2 enemyPosition)

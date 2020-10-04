@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         Move();
         if (sprinting && _currentStamina > 0)
         {
@@ -48,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMovement(InputValue value)
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         _movement = value.Get<Vector2>();
         if(_movement.x == 0 && _movement.y == 0)
         {
@@ -61,11 +65,15 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnSprint()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         sprinting = true; 
     }
 
     public void OnStopSprint()
     {
+        if (!GameManager.instance.gamePlaying)
+            return;
         if (_superSprintActive)
             return;
 
