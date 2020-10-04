@@ -65,6 +65,13 @@ public class GameManager : MonoBehaviour
     public int lapScore = 400;
     public int trackScore = 10;
 
+    [Header("Lap modifiers")]
+    public float enemyHealth = 10;
+    public float enemySpawnReduce = .25f;
+    public float enemySpeed = 10;
+    float enemyHealthBoost;
+    float enemySpeedBoost;
+
     private void Awake()
     {
         if(instance == null)
@@ -136,7 +143,9 @@ public class GameManager : MonoBehaviour
         Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
         if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15 || Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) > 30)
             goto reroll;
-        Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+        enemy.GetComponent<EnemyMovement>().maxHealth += enemyHealthBoost;
+        enemy.GetComponent<EnemyMovement>().maxSpeed += enemySpeedBoost;
     }
 
     void SpawnPowerUp()
@@ -171,7 +180,24 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLap()
     {
-        _spawnInterval -= .5f;
+        int index = UnityEngine.Random.Range(0, 3);
+        switch (index)
+        {
+            case 0:
+                enemyHealthBoost += enemyHealth;
+                print("hp boosted");
+                break;
+            case 1:
+                enemySpeedBoost += enemySpeed;
+                print("Speed boosted");
+                break;
+            case 2:
+                _spawnInterval -= enemySpawnReduce;
+                print("spawn boosted");
+                break;
+            default:
+                break;
+        }
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Heal(20);
     }
 
