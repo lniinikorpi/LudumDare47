@@ -52,6 +52,7 @@ public class Gate : MonoBehaviour
             }
             else
             {
+                gm.tutorialCanvas.SetActive(false);
                 if (gm.playerLastGateIndex == gateIndex - 1)
                 {
                     gm.playerLastGateIndex = gateIndex;

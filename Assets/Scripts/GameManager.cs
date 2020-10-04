@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject powerUpPrefab;
     public GameObject firstWalls;
     public List<Transform> spawns = new List<Transform>();
+    [SerializeField]
     float _spawnInterval = 5;
     float _canSpawn;
     float _canReduceMultiplier;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject endScreen;
     public TMP_Text endScoreText;
+    public GameObject tutorialCanvas;
 
     [Header("Scores")]
     public int enemyScore = 100;
@@ -169,7 +171,7 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLap()
     {
-        _spawnInterval -= .25f;
+        _spawnInterval -= .5f;
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Heal(20);
     }
 
@@ -200,7 +202,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateMultiplierText()
     {
-        scoreMultiplierText.text = scoreMultiplier.ToString();
+        scoreMultiplierText.text = "x" + scoreMultiplier.ToString();
     }
 
     public void UpdateBulletCountText(int value)

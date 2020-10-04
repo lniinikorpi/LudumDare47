@@ -19,16 +19,24 @@ public class EnemyMovement : MonoBehaviour
     public AudioClip walkClip;
     public AudioSource audioSource;
     public AudioSource walkSource;
+    public bool viewer;
     private void Awake()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        _currentHealth = maxHealth;
-        anim.SetFloat("Movement", 1);
+        if(viewer)
+        {
+            anim.Play("Cheer");
+        }
+        else
+        {
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            _currentHealth = maxHealth;
+            anim.SetFloat("Movement", 1);
+        }
     }
 
     void Update()
     {
-        if (!GameManager.instance.gamePlaying)
+        if (!GameManager.instance.gamePlaying || viewer)
             return;
 
         if (Vector2.Distance(transform.position, _player.gameObject.transform.position) > stopDistance)
@@ -106,7 +114,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void PlayWalkSound()
     {
-        if (!GameManager.instance.gamePlaying)
+        if (!GameManager.instance.gamePlaying || viewer)
             return;
         if (Vector2.Distance(transform.position, _player.transform.position) > 20)
         {
