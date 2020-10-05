@@ -42699,6 +42699,8 @@ MonoBehaviour:
   powerUpsSpawned: 0
   powerUpTimer: 15
   gamePlaying: 0
+  spawnedZombiesCount: 0
+  maxSpawnedZombies: 200
   scoreText: {fileID: 906736776}
   timerText: {fileID: 0}
   scoreMultiplierText: {fileID: 1910151864}

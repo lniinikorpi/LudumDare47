@@ -125,7 +125,14 @@ public class ItemButton : MonoBehaviour
                     gm.UpdateBulletCountText(player.playerShoot._currentClipCount);
                     break;
                 case UpgradeType.reloadSpeed:
-                    player.playerShoot.reloadTime -= gm.reloadSpeedUpgrade;
+                    if(player.playerShoot.reloadTime - gm.reloadSpeedUpgrade > .1f)
+                    {
+                        player.playerShoot.reloadTime -= gm.reloadSpeedUpgrade;
+                    }
+                    else
+                    {
+                        player.playerShoot.reloadTime = .1f;
+                    }
                     break;
                 case UpgradeType.staminaMax:
                     player.playerMovement.maxStamina += gm.maxStaminaUpgrade;

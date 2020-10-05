@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     float _canSpawnPowerUp;
     bool _firstGatePassed;
     public bool gamePlaying = false;
+    public int spawnedZombiesCount;
+    public int maxSpawnedZombies = 300;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -150,14 +152,18 @@ public class GameManager : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        _canSpawn = Time.time + _spawnInterval;
-    reroll:
-        Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
-        if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15 || Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) > 30)
-            goto reroll;
-        GameObject enemy = Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
-        enemy.GetComponent<EnemyMovement>().maxHealth += enemyHealthBoost;
-        enemy.GetComponent<EnemyMovement>().maxSpeed += enemySpeedBoost;
+        if (spawnedZombiesCount < maxSpawnedZombies)
+        {
+            spawnedZombiesCount++;
+            _canSpawn = Time.time + _spawnInterval;
+        reroll:
+            Transform spawnPos = spawns[UnityEngine.Random.Range(0, spawns.Count)];
+            if (Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 15 || Vector2.Distance(spawnPos.position, GameObject.FindGameObjectWithTag("Player").transform.position) > 30)
+                goto reroll;
+            GameObject enemy = Instantiate(enemyPrefab, spawnPos.position, Quaternion.identity);
+            enemy.GetComponent<EnemyMovement>().maxHealth += enemyHealthBoost;
+            enemy.GetComponent<EnemyMovement>().maxSpeed += enemySpeedBoost; 
+        }
     }
 
     void SpawnPowerUp()
@@ -204,7 +210,15 @@ public class GameManager : MonoBehaviour
                 print("Speed boosted");
                 break;
             case 2:
-                _spawnInterval -= enemySpawnReduce;
+                if(_spawnInterval - enemySpawnReduce > .1f)
+                {
+                    _spawnInterval -= enemySpawnReduce;
+                }
+                else
+                {
+                    _spawnInterval = .1f;
+                    print("maksimi");
+                }
                 print("spawn boosted");
                 break;
             default:

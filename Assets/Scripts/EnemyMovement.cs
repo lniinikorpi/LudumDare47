@@ -77,6 +77,7 @@ public class EnemyMovement : MonoBehaviour
         Instantiate(GameManager.instance.bloodSplatDie,transform.position,Quaternion.identity);
         audioSource.clip = deathClip;
         audioSource.Play();
+        GameManager.instance.spawnedZombiesCount--;
         Destroy(gameObject);
     }
 
